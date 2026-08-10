@@ -22,3 +22,8 @@ interface TrendingMovie {
   count: number;
   poster_url: string;
 }
+
+interface TrendingCardProps {
+  movie: TrendingMovie;
+  index: number;
+}
