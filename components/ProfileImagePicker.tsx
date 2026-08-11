@@ -1,11 +1,14 @@
 import { icons } from "@/constants/icons";
 import * as ImagePicker from "expo-image-picker";
-import React, { useState } from "react";
+import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 
-const ProfileImagePicker = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+interface ProfileImagePickerProps {
+  form: User;
+  setForm: React.Dispatch<React.SetStateAction<User>>;
+}
 
+const ProfileImagePicker = ({ form, setForm }: ProfileImagePickerProps) => {
   const openImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -13,8 +16,16 @@ const ProfileImagePicker = () => {
       aspect: [1, 1],
     });
 
-    if (!result.canceled) setSelectedImage(result.assets[0].uri);
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+
+      setForm((prev) => ({
+        ...prev,
+        avatar: uri,
+      }));
+    }
   };
+
   return (
     <View className="size-44 items-center justify-center rounded-full border-[5px] border-accent">
       <TouchableOpacity
@@ -22,9 +33,9 @@ const ProfileImagePicker = () => {
         className="size-36 items-center justify-center rounded-full border-2 border-white"
       >
         <Image
-          source={selectedImage ? { uri: selectedImage } : icons.person}
-          className={selectedImage ? "size-36 rounded-full" : "size-10"}
-          tintColor={selectedImage ? undefined : "#fff"}
+          source={form?.avatar ? { uri: form?.avatar } : icons.person}
+          className={form?.avatar ? "size-36 rounded-full" : "size-10"}
+          tintColor={form?.avatar ? undefined : "#fff"}
         />
       </TouchableOpacity>
     </View>

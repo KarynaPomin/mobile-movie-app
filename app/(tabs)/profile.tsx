@@ -1,10 +1,12 @@
-import ProfileImagePicker from "@/components/ProfileImagePicker";
 import { icons } from "@/constants/icons";
+import { useUser } from "@/context/useUser";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const profile = () => {
+  const { user } = useUser();
+
   return (
     <View className="bg-primary flex-1 px-10">
       <Text className="mt-20 mb-5 mx-auto text-lg text-white font-bold mb-3">
@@ -12,8 +14,36 @@ const profile = () => {
       </Text>
 
       <View className="w-full flex-1 flex-col items-center justify-start mt-10 gap-5">
-        <ProfileImagePicker />
-        <Text className="text-white text-lg">User name</Text>
+        <View className="size-44 items-center justify-center rounded-full border-[5px] border-accent">
+          <View className="size-36 items-center justify-center rounded-full border-2 border-white">
+            <Image
+              source={user?.avatar ? { uri: user?.avatar } : icons.person}
+              className={user?.avatar ? "size-36 rounded-full" : "size-10"}
+              tintColor={user?.avatar ? undefined : "#fff"}
+            />
+          </View>
+        </View>
+        <Text className="text-white text-lg">
+          {user?.full_name ? user?.full_name : "User name"}
+        </Text>
+
+        <View className="w-10/12 gap-3">
+          <View className="flex flex-row gap-3 bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4">
+            <Text className=" text-light-100 ">Birthday</Text>
+            <Text className=" text-light-200">
+              {user?.birth_date?.toLocaleString()
+                ? user?.birth_date?.toLocaleString()
+                : "unknown"}
+            </Text>
+          </View>
+
+          <View className="flex flex-row bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4">
+            <Text className=" text-light-100 mr-3">Location</Text>
+            <Text className=" text-light-200">
+              {user?.location ? user?.location : "unknown"}
+            </Text>
+          </View>
+        </View>
 
         <View className="mt-10 w-full gap-4">
           <TouchableOpacity
