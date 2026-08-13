@@ -1,11 +1,19 @@
 import ProfileImagePicker from "@/components/ProfileImagePicker";
 import { useUser } from "@/context/useUser";
+import { fetchCountries } from "@/services/api";
 import { getProfile } from "@/services/storage";
+import useFetch from "@/services/useFetch";
 import formatDate from "@/types/dateFormatter";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const editProfile = () => {
   const router = useRouter();
@@ -17,8 +25,22 @@ const editProfile = () => {
     full_name: user?.full_name || "",
     avatar: user?.avatar || null,
     birth_date: user?.birth_date || null,
-    location: user?.location || null,
+    country: user?.country || null,
   });
+
+  const [ifChangedForm, setIfChangedForm] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [expanded, setExpanded] = useState(false);
+  const [countryQuery, setCountryQuery] = useState("");
+
+  const {
+    data: countries,
+    loading: loading,
+    error: error,
+    refetch: loadCountries,
+    reset,
+  } = useFetch(() => fetchCountries(countryQuery));
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -27,18 +49,31 @@ const editProfile = () => {
       if (profile) {
         setForm(profile);
       }
-
-      loadProfile();
     };
+    loadProfile();
   }, []);
+
+  useEffect(() => {
+    if (error) console.log("useFetch error:", error);
+  }, [error]);
+
+  useEffect(() => {
+    if (!expanded) return;
+
+    const timeout = setTimeout(() => {
+      loadCountries();
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [expanded, countryQuery]);
 
   const handleSaveProfile = async () => {
     if (!form) return;
 
     try {
       await setUserInfo(form);
-      console.log(form);
 
+      setIfChangedForm(false);
       router.back();
     } catch (error) {
       console.error("Failed to save profile:", error);
@@ -57,12 +92,14 @@ const editProfile = () => {
         <TextInput
           placeholder={form.full_name ? form.full_name : "Caleb Summers"}
           value={form.full_name}
-          onChangeText={(text) =>
+          onChangeText={(text) => {
             setForm((prev) => ({
               ...prev,
               full_name: text,
-            }))
-          }
+            }));
+
+            setIfChangedForm(true);
+          }}
           className="bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4"
         />
       </View>
@@ -93,6 +130,8 @@ const editProfile = () => {
                     ...prev,
                     birth_date: new Date(selectedDate),
                   }));
+
+                setIfChangedForm(true);
               }}
             />
           )}
@@ -101,25 +140,67 @@ const editProfile = () => {
 
       <View className="flex flex-col items-end w-11/12">
         <Text className="text-left w-11/12 mt-10 mb-5 mx-auto text-lg text-white font-bold ">
-          Location
+          Country
         </Text>
 
-        <TextInput
-          placeholder={form.location ? form.location : "Ukraine, Kyiv"}
-          value={form?.location ?? ""}
-          onChangeText={(text) =>
-            setForm((prev) => ({
-              ...prev,
-              location: text,
-            }))
-          }
-          className="bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4"
-        />
+        <TouchableOpacity
+          onPress={() => setExpanded((prev) => !prev)}
+          className="bg-secondary border-[0.5px] border-accent rounded-lg w-full p-4"
+        >
+          <TextInput
+            value={countryQuery}
+            placeholder={form.country?.names?.common ?? "Select country"}
+            placeholderTextColor="#aaa"
+            onFocus={() => setExpanded(true)}
+            onChangeText={(text) => {
+              setCountryQuery(text);
+              setIfChangedForm(true);
+            }}
+            className="text-white p-4"
+          />
+        </TouchableOpacity>
+
+        {expanded && (
+          <ScrollView
+            className="bg-secondary border border-accent rounded-lg w-full mt-2"
+            style={{ maxHeight: 140 }}
+            nestedScrollEnabled
+            keyboardShouldPersistTaps="handled"
+          >
+            {countries && countries.length > 0 ? (
+              countries.map((country: Country, index: number) => (
+                <TouchableOpacity
+                  key={country.codes.alpha_2}
+                  onPress={() => {
+                    setForm((prev) => ({
+                      ...prev,
+                      country: country,
+                    }));
+                    setCountryQuery(country.names.common);
+                    setExpanded(false);
+                  }}
+                  className={`p-4 ${
+                    index !== countries.length - 1
+                      ? "border-b border-accent/30"
+                      : ""
+                  }`}
+                >
+                  <Text className="text-white">{country.names.common}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text className="text-white p-5">Not found</Text>
+            )}
+          </ScrollView>
+        )}
       </View>
 
       <TouchableOpacity
-        className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-ld py-3.5 flex flex-row items-center justify-center z-50"
+        className={`${
+          ifChangedForm ? "bg-accent" : "bg-dark-100"
+        } absolute bottom-5 left-0 right-0 mx-5 rounded-ld py-3.5 flex flex-row items-center justify-center z-50`}
         onPress={handleSaveProfile}
+        disabled={!ifChangedForm}
       >
         <Text className="text-white font-semibold text-base">Save</Text>
       </TouchableOpacity>

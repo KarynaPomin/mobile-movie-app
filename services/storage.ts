@@ -12,7 +12,7 @@ export async function saveProfile(profile: User) {
 export async function getProfile() {
   try {
     const jsonValue = await AsyncStorage.getItem(PROFILE_KEY);
-    console.log(jsonValue);
+
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (error) {
     console.log("Error geting data: ", error);

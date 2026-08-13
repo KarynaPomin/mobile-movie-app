@@ -49,3 +49,51 @@ export const fetchMovieDetails = async (
     throw error;
   }
 };
+
+interface RestCountriesErrorPayload {
+  errors?: { message: string }[];
+}
+const RESTCOUNTRIES_BASE_URL = "https://api.restcountries.com/countries/v5";
+const RESTCOUNTRIES_API_KEY = process.env.EXPO_PUBLIC_RESTCOUNTRIES_API_KEY;
+
+export const fetchCountries = async (query?: string): Promise<Country[]> => {
+  if (!RESTCOUNTRIES_API_KEY) {
+    throw new Error(
+      "Missing EXPO_PUBLIC_RESTCOUNTRIES_API_KEY — set it in your .env file.",
+    );
+  }
+
+  const params = new URLSearchParams({
+    response_fields:
+      "names.common,names.official,codes.alpha_2,region,subregion",
+    limit: "20",
+  });
+
+  if (query) params.set("q", query);
+
+  const response = await fetch(
+    `${RESTCOUNTRIES_BASE_URL}?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${RESTCOUNTRIES_API_KEY}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const payload: RestCountriesErrorPayload = await response
+      .json()
+      .catch(() => ({}));
+    const message = payload.errors?.[0]?.message ?? response.statusText;
+
+    if (response.status === 404) {
+      return [];
+    }
+
+    throw new Error(`Failed to fetch countries: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  return Array.isArray(data.data?.objects) ? data.data.objects : [];
+};

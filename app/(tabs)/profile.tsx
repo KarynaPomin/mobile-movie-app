@@ -39,7 +39,7 @@ const profile = () => {
           <View className="flex flex-row bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4">
             <Text className=" text-light-100 mr-3">Location</Text>
             <Text className=" text-light-200">
-              {user?.location ? user?.location : "unknown"}
+              {user?.country ? user?.country?.names?.official : "unknown"}
             </Text>
           </View>
         </View>
