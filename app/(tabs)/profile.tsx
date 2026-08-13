@@ -1,5 +1,6 @@
 import { icons } from "@/constants/icons";
 import { useUser } from "@/context/useUser";
+import formatDate from "@/types/dateFormatter";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -31,9 +32,7 @@ const profile = () => {
           <View className="flex flex-row gap-3 bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4">
             <Text className=" text-light-100 ">Birthday</Text>
             <Text className=" text-light-200">
-              {user?.birth_date?.toLocaleString()
-                ? user?.birth_date?.toLocaleString()
-                : "unknown"}
+              {user?.birth_date ? formatDate(user?.birth_date) : "unknown"}
             </Text>
           </View>
 

@@ -1,6 +1,8 @@
 import ProfileImagePicker from "@/components/ProfileImagePicker";
 import { useUser } from "@/context/useUser";
 import { getProfile } from "@/services/storage";
+import formatDate from "@/types/dateFormatter";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -10,11 +12,12 @@ const editProfile = () => {
 
   const { user, setUserInfo } = useUser();
 
+  const [showPicker, setShowPicker] = useState<boolean>(false);
   const [form, setForm] = useState<User>({
-    full_name: "",
-    avatar: "",
-    birth_date: null,
-    location: "",
+    full_name: user?.full_name || "",
+    avatar: user?.avatar || null,
+    birth_date: user?.birth_date || null,
+    location: user?.location || null,
   });
 
   useEffect(() => {
@@ -69,21 +72,31 @@ const editProfile = () => {
           Date of Birth
         </Text>
 
-        <TextInput
-          placeholder={
-            form.birth_date?.toLocaleString()
-              ? form.birth_date?.toLocaleString()
-              : "13 June, 2000"
-          }
-          value={form.birth_date?.toLocaleDateString()}
-          onChangeText={(date) =>
-            setForm((prev) => ({
-              ...prev,
-              birth_date: new Date(date),
-            }))
-          }
+        <TouchableOpacity
+          onPress={() => setShowPicker(true)}
           className="bg-secondary text-white border-[0.5px] border-accent rounded-lg w-full placeholder:text-light-100 p-4"
-        />
+        >
+          <Text className="text-light-100 ">
+            {formatDate(form.birth_date ?? new Date())}
+          </Text>
+          {showPicker && (
+            <DateTimePicker
+              value={new Date(form.birth_date ?? new Date())}
+              mode="date"
+              display="default"
+              maximumDate={new Date()}
+              onChange={(event, selectedDate) => {
+                setShowPicker(false);
+
+                if (selectedDate)
+                  setForm((prev) => ({
+                    ...prev,
+                    birth_date: new Date(selectedDate),
+                  }));
+              }}
+            />
+          )}
+        </TouchableOpacity>
       </View>
 
       <View className="flex flex-col items-end w-11/12">
