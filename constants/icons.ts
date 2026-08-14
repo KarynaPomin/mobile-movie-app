@@ -1,4 +1,5 @@
 import arrow from "@/assets/icons/arrow.png";
+import bookmark from "@/assets/icons/bookmark.png";
 import home from "@/assets/icons/home.png";
 import logo from "@/assets/icons/logo.png";
 import person from "@/assets/icons/person.png";
@@ -14,6 +15,7 @@ export const icons = {
   person,
   logo,
   save,
+  bookmark,
   star,
   play,
   arrow,
