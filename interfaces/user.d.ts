@@ -12,6 +12,7 @@ interface UserContextType {
 
 interface FavoritesContextType {
   favorites: Movie[];
+  loading: boolean;
   addFavorite: (movie: Movie) => Promise<void>;
   removeFavorite: (movieId: Movie["id"]) => Promise<void>;
   isFavorite: (movieId: Movie["id"]) => Promise<boolean>;

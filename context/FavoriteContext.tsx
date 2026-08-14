@@ -1,16 +1,16 @@
 import {
-    addFavoriteMovie,
-    getFavoriteMovies,
-    isFavoriteMovie,
-    removeFavoriteMovies,
+  addFavoriteMovie,
+  getFavoriteMovies,
+  isFavoriteMovie,
+  removeFavoriteMovies,
 } from "@/services/storage";
 import {
-    createContext,
-    ReactNode,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 interface FavoriteProviderProps {
@@ -23,12 +23,13 @@ export const FavoriteContext = createContext<FavoritesContextType | undefined>(
 
 export const FavoriteMoviesProvider = ({ children }: FavoriteProviderProps) => {
   const [favorites, setFavoritesList] = useState<Movie[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadFavorites = async () => {
       const favorites = await getFavoriteMovies();
-
       setFavoritesList(favorites);
+      setLoading(false);
     };
 
     loadFavorites();
@@ -58,11 +59,12 @@ export const FavoriteMoviesProvider = ({ children }: FavoriteProviderProps) => {
   const contexValue = useMemo(
     () => ({
       favorites,
+      loading,
       addFavorite,
       removeFavorite,
       isFavorite,
     }),
-    [favorites, addFavorite, removeFavorite, isFavorite],
+    [favorites, loading, addFavorite, removeFavorite, isFavorite],
   );
 
   return (
