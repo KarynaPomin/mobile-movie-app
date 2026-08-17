@@ -17,7 +17,8 @@
         "foregroundImage": "./assets/images/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.karyna.p.movieapp"
     },
     "web": {
       "bundler": "metro",
@@ -43,6 +44,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ae6479a1-59e1-4f25-b65d-a9ca0aa0c02e"
+      }
+    },
+    "owner": "karyna.p"
   }
 }

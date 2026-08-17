@@ -25,7 +25,7 @@ const saved = () => {
         />
       ) : (
         <View className="pb-10 px-5">
-          {movies && (
+          {movies ? (
             <View>
               <FlatList
                 data={movies}
@@ -42,6 +42,12 @@ const saved = () => {
                 className="mt-2 pb-32"
                 showsVerticalScrollIndicator={false}
               />
+            </View>
+          ) : (
+            <View className="mt-10 px-5">
+              <Text className="text-center text-gray-500">
+                No favorites movies found
+              </Text>
             </View>
           )}
         </View>
