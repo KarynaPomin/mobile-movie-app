@@ -3,16 +3,19 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { useFavorite } from "@/context/useFavorite";
 import React from "react";
-import { ActivityIndicator, FlatList, Image, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 const saved = () => {
   const { favorites: movies, loading } = useFavorite();
 
   return (
-    <View className="bg-primary flex-1">
+    <View className="bg-primary flex-1 ">
       <Image source={images.bg} className="absolute w-full z-0" />
 
-      <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+      <Image source={icons.logo} className="w-20 h-20 mt-20 mb-5 mx-auto" />
+      <Text className="text-lg text-white font-bold mt-5 mb-3 px-5">
+        Favorites Movies
+      </Text>
 
       {loading ? (
         <ActivityIndicator
@@ -21,7 +24,7 @@ const saved = () => {
           className="mt-10 self-center"
         />
       ) : (
-        <View className="pb-10">
+        <View className="pb-10 px-5">
           {movies && (
             <View>
               <FlatList
@@ -35,7 +38,7 @@ const saved = () => {
                   paddingRight: 5,
                   marginBottom: 10,
                 }}
-
+                contentContainerStyle={{ paddingBottom: 300 }}
                 className="mt-2 pb-32"
                 showsVerticalScrollIndicator={false}
               />

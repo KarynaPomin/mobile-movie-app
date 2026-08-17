@@ -89,29 +89,6 @@ const profile = () => {
               tintColor="#fff"
             />
           </TouchableOpacity>
-
-          <TouchableOpacity
-            className="h-20 w-full flex-row items-center rounded-2xl bg-dark-100 px-4"
-            onPress={() => router.push("/profile/settings")}
-          >
-            <View className="size-12 items-center justify-center rounded-full bg-accent">
-              <Image
-                source={icons.setting}
-                className="size-6"
-                tintColor="#fff"
-              />
-            </View>
-
-            <Text className="ml-5 flex-1 text-base font-semibold text-white">
-              Settings
-            </Text>
-
-            <Image
-              source={icons.arrow}
-              className="size-5 rotate-180"
-              tintColor="#fff"
-            />
-          </TouchableOpacity>
         </View>
       </View>
     </View>

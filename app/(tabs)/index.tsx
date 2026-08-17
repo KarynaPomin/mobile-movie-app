@@ -47,7 +47,7 @@ export default function Index() {
           paddingBottom: 10,
         }}
       >
-        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+        <Image source={icons.logo} className="w-20 h-20 mt-20 mb-5 mx-auto" />
 
         {moviesLoading || trendingLoading ? (
           <ActivityIndicator

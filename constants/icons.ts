@@ -6,7 +6,6 @@ import person from "@/assets/icons/person.png";
 import play from "@/assets/icons/play.png";
 import save from "@/assets/icons/save.png";
 import search from "@/assets/icons/search.png";
-import setting from "@/assets/icons/setting.png";
 import star from "@/assets/icons/star.png";
 
 export const icons = {
@@ -19,5 +18,4 @@ export const icons = {
   star,
   play,
   arrow,
-  setting,
 };

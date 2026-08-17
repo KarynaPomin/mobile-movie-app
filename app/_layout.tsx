@@ -26,18 +26,6 @@ export default function RootLayout() {
               headerTintColor: "#fff",
             }}
           />
-
-          <Stack.Screen
-            name="profile/settings"
-            options={{
-              title: "Settings",
-              headerTitleAlign: "center",
-              headerStyle: {
-                backgroundColor: "#030014",
-              },
-              headerTintColor: "#fff",
-            }}
-          />
         </Stack>
       </FavoriteMoviesProvider>
     </UserProvider>
