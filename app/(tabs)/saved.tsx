@@ -25,7 +25,7 @@ const saved = () => {
         />
       ) : (
         <View className="pb-10 px-5">
-          {movies ? (
+          {movies.length > 0 ? (
             <View>
               <FlatList
                 data={movies}

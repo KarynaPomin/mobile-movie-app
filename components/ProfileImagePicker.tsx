@@ -6,9 +6,14 @@ import { Image, TouchableOpacity, View } from "react-native";
 interface ProfileImagePickerProps {
   form: User;
   setForm: React.Dispatch<React.SetStateAction<User>>;
+  setIfChangedForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ProfileImagePicker = ({ form, setForm }: ProfileImagePickerProps) => {
+const ProfileImagePicker = ({
+  form,
+  setForm,
+  setIfChangedForm,
+}: ProfileImagePickerProps) => {
   const openImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -23,6 +28,8 @@ const ProfileImagePicker = ({ form, setForm }: ProfileImagePickerProps) => {
         ...prev,
         avatar: uri,
       }));
+
+      setIfChangedForm(true);
     }
   };
 

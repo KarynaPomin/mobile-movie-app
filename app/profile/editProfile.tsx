@@ -82,7 +82,11 @@ const editProfile = () => {
 
   return (
     <View className="bg-primary flex-1 px-10 flex justify-start items-center pt-10">
-      <ProfileImagePicker form={form} setForm={setForm} />
+      <ProfileImagePicker
+        form={form}
+        setForm={setForm}
+        setIfChangedForm={setIfChangedForm}
+      />
 
       <View className="flex flex-col items-end w-11/12">
         <Text className="text-left w-11/12 mt-10 mb-5 mx-auto text-lg text-white font-bold ">
